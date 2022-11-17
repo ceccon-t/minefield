@@ -4,6 +4,9 @@
 # Compiled class file
 *.class
 
+# Target files
+*/target/
+
 # Log file
 *.log
 
