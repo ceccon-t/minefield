@@ -1,13 +1,12 @@
 package dev.ceccon.minefield;
 
-/**
- * Hello world!
- *
- */
-public class App 
-{
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
+import dev.ceccon.minefield.controller.Controller;
+
+import javax.swing.*;
+
+public class App {
+    public static void main( String[] args ) {
+        System.out.println( "MINEFIELD - Starting game" );
+        SwingUtilities.invokeLater(Controller::new);
     }
 }
