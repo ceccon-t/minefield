@@ -35,13 +35,13 @@ public class Controller {
         mainFrame.setContentPane(mainPanel);
     }
 
-    public void handlePlayerActionOn(PlayerAction action, int row, int col) {
+    public void handlePlayerActionOn(PlayerAction action, int x, int y) {
         if (!playing) return;
         switch (action) {
             case ACTION_OPEN:
                 score += 10;
                 controlContainerPanel.updateScoreDisplay(score);
-                if (row == 3 && col == 3) {
+                if (x == 3 && y == 3) {
                     playing = false;
                     controlContainerPanel.displayDefeatMessage();
                     return;
@@ -51,13 +51,13 @@ public class Controller {
                     controlContainerPanel.displayVictoryMessage();
                     return;
                 }
-                boardPanel.setCellState(row, col, CellState.OPEN);
+                boardPanel.setCellState(x, y, CellState.OPEN);
                 break;
             case ACTION_FLAG:
                 if (remainingFlags < 1) return;
                 remainingFlags--;
                 controlContainerPanel.setRemainingFlagsDisplay(remainingFlags, totalFlags);
-                boardPanel.setCellState(row, col, CellState.FLAGGED);
+                boardPanel.setCellState(x, y, CellState.FLAGGED);
                 break;
         }
     }

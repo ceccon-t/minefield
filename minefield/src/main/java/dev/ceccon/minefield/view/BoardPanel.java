@@ -39,24 +39,24 @@ public class BoardPanel extends JPanel {
         setBorder(BorderFactory.createLineBorder(Color.BLACK, BOARD_OUTER_BORDER_THICKNESS));
     }
 
-    public void cellCickedWith(int i, int j, int b) {
-        switch (b) {
+    public void cellCickedWith(int x, int y, int buttonNumber) {
+        switch (buttonNumber) {
             case 1:
-                controller.handlePlayerActionOn(PlayerAction.ACTION_OPEN, i, j);
+                controller.handlePlayerActionOn(PlayerAction.ACTION_OPEN, x, y);
                 break;
             case 3:
-                controller.handlePlayerActionOn(PlayerAction.ACTION_FLAG, i, j);
+                controller.handlePlayerActionOn(PlayerAction.ACTION_FLAG, x, y);
                 break;
         }
     }
 
-    public void setCellLabel(int i, int j, String label) {
-        CellPanel cell = cells[i][j];
+    public void setCellLabel(int x, int y, String label) {
+        CellPanel cell = cells[x][y];
         cell.setLabelText(label);
     }
 
-    public void setCellState(int i, int j, CellState state) {
-        CellPanel cell = cells[i][j];
+    public void setCellState(int x, int y, CellState state) {
+        CellPanel cell = cells[x][y];
         switch (state) {
             case OPEN:
                 cell.markOpen();
