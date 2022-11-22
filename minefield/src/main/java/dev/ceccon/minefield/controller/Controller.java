@@ -1,5 +1,7 @@
 package dev.ceccon.minefield.controller;
 
+import dev.ceccon.minefield.constants.CellState;
+import dev.ceccon.minefield.constants.PlayerAction;
 import dev.ceccon.minefield.view.*;
 
 public class Controller {
@@ -15,15 +17,48 @@ public class Controller {
     private int numRows = 15;
     private int numCols = 25;
 
+    private int totalFlags = 10;
+    private int remainingFlags = 10;
+    private int score = 42;
+
+    private boolean playing = true;
+
     public Controller() {
         titleContainerPanel = new TitleContainerPanel();
-        boardPanel = new BoardPanel(numRows, numCols);
+        boardPanel = new BoardPanel(numRows, numCols, this);
         boardContainerPanel = new BoardContainerPanel(boardPanel);
-        controlContainerPanel = new ControlContainerPanel();
+        controlContainerPanel = new ControlContainerPanel(remainingFlags, totalFlags, score);
 
         mainPanel = new MainPanel(titleContainerPanel, boardContainerPanel, controlContainerPanel);
 
         mainFrame = new MainFrame();
         mainFrame.setContentPane(mainPanel);
+    }
+
+    public void handlePlayerActionOn(PlayerAction action, int row, int col) {
+        if (!playing) return;
+        switch (action) {
+            case ACTION_OPEN:
+                score += 10;
+                controlContainerPanel.updateScoreDisplay(score);
+                if (row == 3 && col == 3) {
+                    playing = false;
+                    controlContainerPanel.displayDefeatMessage();
+                    return;
+                }
+                if (score > 100) {
+                    playing = false;
+                    controlContainerPanel.displayVictoryMessage();
+                    return;
+                }
+                boardPanel.setCellState(row, col, CellState.OPEN);
+                break;
+            case ACTION_FLAG:
+                if (remainingFlags < 1) return;
+                remainingFlags--;
+                controlContainerPanel.setRemainingFlagsDisplay(remainingFlags, totalFlags);
+                boardPanel.setCellState(row, col, CellState.FLAGGED);
+                break;
+        }
     }
 }

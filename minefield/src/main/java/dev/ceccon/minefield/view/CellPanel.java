@@ -11,13 +11,16 @@ public class CellPanel extends JPanel {
     private static final int CELL_WIDTH = 25;
     private static final int CELL_HEIGHT = 25;
 
+    private BoardPanel board;
+
     private int x;
     private int y;
     private JLabel labelComponent;
 
-    public CellPanel(int x, int y, String label) {
+    public CellPanel(int x, int y, String label, BoardPanel board) {
         this.x = x;
         this.y = y;
+        this.board = board;
 
         labelComponent = new JLabel(label);
         add(labelComponent);
@@ -43,14 +46,8 @@ public class CellPanel extends JPanel {
                 switch(buttonPressed) {
                     // TODO: Create enum to map button numbers semantically
                     case 1:
-                        markOpen();
-                        break;
-                    case 2:
-                        markMine();
-                        break;
                     case 3:
-                        markFlagged();
-                        break;
+                        board.cellCickedWith(x, y, buttonPressed);
                     default:
                         System.out.println("Could not recognize button clicked, identifier: " + buttonPressed);
 
@@ -59,7 +56,7 @@ public class CellPanel extends JPanel {
         });
     }
 
-    private void markOpen() {
+    public void markOpen() {
         setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         Integer randomNumberForDebug = (new Random()).nextInt(9);
         if (randomNumberForDebug > 0) {
@@ -67,11 +64,11 @@ public class CellPanel extends JPanel {
         }
     }
 
-    private void markMine() {
+    public void markMine() {
         setBackground(Color.RED);
     }
 
-    private void markFlagged() {
+    public void markFlagged() {
         labelComponent.setText("!");
         setBackground(Color.YELLOW);
     }
