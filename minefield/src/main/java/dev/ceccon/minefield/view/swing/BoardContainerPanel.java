@@ -1,4 +1,4 @@
-package dev.ceccon.minefield.view;
+package dev.ceccon.minefield.view.swing;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

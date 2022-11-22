@@ -1,4 +1,4 @@
-package dev.ceccon.minefield.view;
+package dev.ceccon.minefield.view.swing;
 
 import dev.ceccon.minefield.constants.CellState;
 import dev.ceccon.minefield.constants.PlayerAction;
@@ -59,14 +59,34 @@ public class BoardPanel extends JPanel {
         CellPanel cell = cells[x][y];
         switch (state) {
             case OPEN:
-                cell.markOpen();
+                cell.displayOpen();
                 break;
             case FLAGGED:
-                cell.markFlagged();
+                cell.displayFlagged();
                 break;
             case MINE:
-                cell.markMine();
+                cell.displayMine();
                 break;
         }
+    }
+
+    public void displayAsHidden(int x, int y) {
+        CellPanel cell = cells[x][y];
+        cell.displayHidden();
+    }
+
+    public void displayAsOpen(int x, int y) {
+        CellPanel cell = cells[x][y];
+        cell.displayOpen();
+    }
+
+    public void displayAsFlagged(int x, int y) {
+        CellPanel cell = cells[x][y];
+        cell.displayFlagged();
+    }
+
+    public void displayAsMine(int x, int y) {
+        CellPanel cell = cells[x][y];
+        cell.displayMine();
     }
 }

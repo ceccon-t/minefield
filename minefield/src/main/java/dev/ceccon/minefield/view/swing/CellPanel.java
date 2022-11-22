@@ -1,6 +1,9 @@
-package dev.ceccon.minefield.view;
+package dev.ceccon.minefield.view.swing;
+
+import dev.ceccon.minefield.view.swing.BoardPanel;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -17,6 +20,9 @@ public class CellPanel extends JPanel {
     private int y;
     private JLabel labelComponent;
 
+    private Color hiddenColor;
+    private Border hiddenBorder;
+
     public CellPanel(int x, int y, String label, BoardPanel board) {
         this.x = x;
         this.y = y;
@@ -27,7 +33,9 @@ public class CellPanel extends JPanel {
 
         setPreferredSize(new Dimension(CELL_WIDTH, CELL_HEIGHT));
 
-        setBorder(BorderFactory.createRaisedBevelBorder());
+        this.hiddenColor = getBackground();
+        this.hiddenBorder = BorderFactory.createRaisedBevelBorder();
+        setBorder(hiddenBorder);
 
         registerClickListener();
     }
@@ -56,7 +64,12 @@ public class CellPanel extends JPanel {
         });
     }
 
-    public void markOpen() {
+    public void displayHidden() {
+        setBackground(hiddenColor);
+        setBorder(hiddenBorder);
+    }
+
+    public void displayOpen() {
         setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         Integer randomNumberForDebug = (new Random()).nextInt(9);
         if (randomNumberForDebug > 0) {
@@ -64,11 +77,11 @@ public class CellPanel extends JPanel {
         }
     }
 
-    public void markMine() {
+    public void displayMine() {
         setBackground(Color.RED);
     }
 
-    public void markFlagged() {
+    public void displayFlagged() {
         labelComponent.setText("!");
         setBackground(Color.YELLOW);
     }

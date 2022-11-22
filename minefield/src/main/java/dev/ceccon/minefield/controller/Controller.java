@@ -1,18 +1,11 @@
 package dev.ceccon.minefield.controller;
 
-import dev.ceccon.minefield.constants.CellState;
 import dev.ceccon.minefield.constants.PlayerAction;
-import dev.ceccon.minefield.view.*;
+import dev.ceccon.minefield.view.IOEngine;
+import dev.ceccon.minefield.view.IOEngineFactory;
+import dev.ceccon.minefield.view.IOEngines;
 
 public class Controller {
-
-    // Graphical elements
-    private TitleContainerPanel titleContainerPanel;
-    private BoardPanel boardPanel;
-    private BoardContainerPanel boardContainerPanel;
-    private ControlContainerPanel controlContainerPanel;
-    private MainPanel mainPanel;
-    private MainFrame mainFrame;
 
     private int numRows = 15;
     private int numCols = 25;
@@ -23,16 +16,10 @@ public class Controller {
 
     private boolean playing = true;
 
+    private IOEngine ioEngine;
+
     public Controller() {
-        titleContainerPanel = new TitleContainerPanel();
-        boardPanel = new BoardPanel(numRows, numCols, this);
-        boardContainerPanel = new BoardContainerPanel(boardPanel);
-        controlContainerPanel = new ControlContainerPanel(remainingFlags, totalFlags, score);
-
-        mainPanel = new MainPanel(titleContainerPanel, boardContainerPanel, controlContainerPanel);
-
-        mainFrame = new MainFrame();
-        mainFrame.setContentPane(mainPanel);
+        this.ioEngine = IOEngineFactory.createEngine(numRows, numCols, totalFlags, this, IOEngines.DEFAULT_ENGINE);
     }
 
     public void handlePlayerActionOn(PlayerAction action, int x, int y) {
@@ -40,24 +27,24 @@ public class Controller {
         switch (action) {
             case ACTION_OPEN:
                 score += 10;
-                controlContainerPanel.updateScoreDisplay(score);
+                ioEngine.updateScoreDisplay(score);
                 if (x == 3 && y == 3) {
                     playing = false;
-                    controlContainerPanel.displayDefeatMessage();
+                    ioEngine.displayDefeatMessage();
                     return;
                 }
                 if (score > 100) {
                     playing = false;
-                    controlContainerPanel.displayVictoryMessage();
+                    ioEngine.displayVictoryMessage();
                     return;
                 }
-                boardPanel.setCellState(x, y, CellState.OPEN);
+                ioEngine.displayAsOpen(x, y);
                 break;
             case ACTION_FLAG:
                 if (remainingFlags < 1) return;
                 remainingFlags--;
-                controlContainerPanel.setRemainingFlagsDisplay(remainingFlags, totalFlags);
-                boardPanel.setCellState(x, y, CellState.FLAGGED);
+                ioEngine.displayRemainingFlagsMessage(remainingFlags, totalFlags);
+                ioEngine.displayAsFlagged(x, y);
                 break;
         }
     }
