@@ -4,13 +4,11 @@ public interface IOEngine {
 
     void displayAsHidden(Integer x, Integer y);
 
-    void displayAsOpen(Integer x, Integer y);
+    void displayAsOpen(Integer x, Integer y, Integer numAdjacentMines);
 
     void displayAsFlagged(Integer x, Integer y);
 
     void displayAsMine(Integer x, Integer y);
-
-    void setTextOnCell(Integer x, Integer y, String text);
 
     void displayRemainingFlagsMessage(Integer remaining, Integer total);
 

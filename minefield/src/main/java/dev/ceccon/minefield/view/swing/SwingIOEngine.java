@@ -37,8 +37,8 @@ public class SwingIOEngine implements IOEngine {
     }
 
     @Override
-    public void displayAsOpen(Integer x, Integer y) {
-        boardPanel.displayAsOpen(x, y);
+    public void displayAsOpen(Integer x, Integer y, Integer numAdjacentMines) {
+        boardPanel.displayAsOpen(x, y, numAdjacentMines);
     }
 
     @Override
@@ -49,11 +49,6 @@ public class SwingIOEngine implements IOEngine {
     @Override
     public void displayAsMine(Integer x, Integer y) {
         boardPanel.displayAsMine(x, y);
-    }
-
-    @Override
-    public void setTextOnCell(Integer x, Integer y, String text) {
-        boardPanel.setCellLabel(x, y, text);
     }
 
     @Override

@@ -50,34 +50,14 @@ public class BoardPanel extends JPanel {
         }
     }
 
-    public void setCellLabel(int x, int y, String label) {
-        CellPanel cell = cells[x][y];
-        cell.setLabelText(label);
-    }
-
-    public void setCellState(int x, int y, CellState state) {
-        CellPanel cell = cells[x][y];
-        switch (state) {
-            case OPEN:
-                cell.displayOpen();
-                break;
-            case FLAGGED:
-                cell.displayFlagged();
-                break;
-            case MINE:
-                cell.displayMine();
-                break;
-        }
-    }
-
     public void displayAsHidden(int x, int y) {
         CellPanel cell = cells[x][y];
         cell.displayHidden();
     }
 
-    public void displayAsOpen(int x, int y) {
+    public void displayAsOpen(int x, int y, int numAdjacentMines) {
         CellPanel cell = cells[x][y];
-        cell.displayOpen();
+        cell.displayOpen(numAdjacentMines);
     }
 
     public void displayAsFlagged(int x, int y) {

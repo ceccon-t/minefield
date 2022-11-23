@@ -1,7 +1,5 @@
 package dev.ceccon.minefield.view.swing;
 
-import dev.ceccon.minefield.view.swing.BoardPanel;
-
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
@@ -20,8 +18,8 @@ public class CellPanel extends JPanel {
     private int y;
     private JLabel labelComponent;
 
-    private Color hiddenColor;
-    private Border hiddenBorder;
+    private Color defaultColor;
+    private Border defaultBorder;
 
     public CellPanel(int x, int y, String label, BoardPanel board) {
         this.x = x;
@@ -33,14 +31,14 @@ public class CellPanel extends JPanel {
 
         setPreferredSize(new Dimension(CELL_WIDTH, CELL_HEIGHT));
 
-        this.hiddenColor = getBackground();
-        this.hiddenBorder = BorderFactory.createRaisedBevelBorder();
-        setBorder(hiddenBorder);
+        this.defaultColor = getBackground();
+        this.defaultBorder = BorderFactory.createRaisedBevelBorder();
+        setBorder(defaultBorder);
 
         registerClickListener();
     }
 
-    public void setLabelText(String label) {
+    private void setLabelText(String label) {
         labelComponent.setText(label);
     }
 
@@ -65,25 +63,28 @@ public class CellPanel extends JPanel {
     }
 
     public void displayHidden() {
-        setBackground(hiddenColor);
-        setBorder(hiddenBorder);
+        setBackground(defaultColor);
+        setBorder(defaultBorder);
+        setLabelText(" ");
     }
 
-    public void displayOpen() {
+    public void displayOpen(Integer numAdjacentMines) {
+        setBackground(defaultColor);
         setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-        Integer randomNumberForDebug = (new Random()).nextInt(9);
-        if (randomNumberForDebug > 0) {
-            setLabelText(randomNumberForDebug.toString());
+        if (numAdjacentMines > 0) {
+            setLabelText(numAdjacentMines.toString());
         }
     }
 
     public void displayMine() {
         setBackground(Color.RED);
+        setBorder(defaultBorder);
     }
 
     public void displayFlagged() {
-        labelComponent.setText("!");
         setBackground(Color.YELLOW);
+        setBorder(defaultBorder);
+        labelComponent.setText("!");
     }
 
 }

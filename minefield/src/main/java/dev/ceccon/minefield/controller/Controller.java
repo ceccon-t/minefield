@@ -5,6 +5,8 @@ import dev.ceccon.minefield.view.IOEngine;
 import dev.ceccon.minefield.view.IOEngineFactory;
 import dev.ceccon.minefield.view.IOEngines;
 
+import java.util.Random;
+
 public class Controller {
 
     private int numRows = 15;
@@ -38,7 +40,8 @@ public class Controller {
                     ioEngine.displayVictoryMessage();
                     return;
                 }
-                ioEngine.displayAsOpen(x, y);
+                Integer randomNumberForDebug = (new Random()).nextInt(9);
+                ioEngine.displayAsOpen(x, y, randomNumberForDebug);
                 break;
             case ACTION_FLAG:
                 if (remainingFlags < 1) return;
