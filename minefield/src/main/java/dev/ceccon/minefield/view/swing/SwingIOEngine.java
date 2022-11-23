@@ -2,6 +2,7 @@ package dev.ceccon.minefield.view.swing;
 
 import dev.ceccon.minefield.controller.PlayerActionHandler;
 import dev.ceccon.minefield.view.IOEngine;
+import dev.ceccon.minefield.view.swing.graphical.*;
 
 public class SwingIOEngine implements IOEngine {
 

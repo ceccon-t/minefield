@@ -1,4 +1,6 @@
-package dev.ceccon.minefield.view.swing;
+package dev.ceccon.minefield.view.swing.graphical;
+
+import dev.ceccon.minefield.view.swing.graphical.BoardPanel;
 
 import javax.swing.*;
 import javax.swing.border.Border;
