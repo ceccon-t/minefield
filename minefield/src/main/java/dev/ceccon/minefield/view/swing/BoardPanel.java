@@ -1,8 +1,7 @@
 package dev.ceccon.minefield.view.swing;
 
-import dev.ceccon.minefield.constants.CellState;
 import dev.ceccon.minefield.constants.PlayerAction;
-import dev.ceccon.minefield.controller.Controller;
+import dev.ceccon.minefield.controller.PlayerActionHandler;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,12 +10,12 @@ public class BoardPanel extends JPanel {
 
     private static final int BOARD_OUTER_BORDER_THICKNESS = 5;
 
-    Controller controller;
+    PlayerActionHandler actionHandler;
     private CellPanel[][] cells;
 
-    public BoardPanel(int rows, int cols, Controller controller) {
+    public BoardPanel(int rows, int cols, PlayerActionHandler actionHandler) {
         this.cells = new CellPanel[rows][cols];
-        this.controller = controller;
+        this.actionHandler = actionHandler;
 
         setLayout(new GridBagLayout());
 
@@ -39,13 +38,13 @@ public class BoardPanel extends JPanel {
         setBorder(BorderFactory.createLineBorder(Color.BLACK, BOARD_OUTER_BORDER_THICKNESS));
     }
 
-    public void cellCickedWith(int x, int y, int buttonNumber) {
+    public void cellClickedWith(int x, int y, int buttonNumber) {
         switch (buttonNumber) {
             case 1:
-                controller.handlePlayerActionOn(PlayerAction.ACTION_OPEN, x, y);
+                actionHandler.handlePlayerActionOnCell(PlayerAction.ACTION_OPEN, x, y);
                 break;
             case 3:
-                controller.handlePlayerActionOn(PlayerAction.ACTION_FLAG, x, y);
+                actionHandler.handlePlayerActionOnCell(PlayerAction.ACTION_FLAG, x, y);
                 break;
         }
     }

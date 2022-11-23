@@ -1,11 +1,11 @@
 package dev.ceccon.minefield.view;
 
-import dev.ceccon.minefield.controller.Controller;
+import dev.ceccon.minefield.controller.PlayerActionHandler;
 import dev.ceccon.minefield.view.swing.SwingIOEngine;
 
 public class IOEngineFactory {
 
-    public static IOEngine buildEngine(Integer totalRows, Integer totalColumns, Integer totalFlags, Controller controller, IOEngines desiredEngine) {
+    public static IOEngine buildEngine(Integer totalRows, Integer totalColumns, Integer totalFlags, PlayerActionHandler controller, IOEngines desiredEngine) {
         IOEngine engine;
 
         switch (desiredEngine) {

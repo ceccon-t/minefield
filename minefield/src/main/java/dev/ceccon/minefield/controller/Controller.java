@@ -7,7 +7,7 @@ import dev.ceccon.minefield.view.IOEngines;
 
 import java.util.Random;
 
-public class Controller {
+public class Controller implements PlayerActionHandler {
 
     private int numRows = 15;
     private int numCols = 25;
@@ -24,7 +24,8 @@ public class Controller {
         this.ioEngine = IOEngineFactory.buildEngine(numRows, numCols, totalFlags, this, IOEngines.DEFAULT_ENGINE);
     }
 
-    public void handlePlayerActionOn(PlayerAction action, int x, int y) {
+    @Override
+    public void handlePlayerActionOnCell(PlayerAction action, int x, int y) {
         if (!playing) return;
         switch (action) {
             case ACTION_OPEN:

@@ -1,12 +1,11 @@
 package dev.ceccon.minefield.view.swing;
 
-import dev.ceccon.minefield.controller.Controller;
+import dev.ceccon.minefield.controller.PlayerActionHandler;
 import dev.ceccon.minefield.view.IOEngine;
-import dev.ceccon.minefield.view.swing.*;
 
 public class SwingIOEngine implements IOEngine {
 
-    Controller controller;
+    PlayerActionHandler actionHandler;
 
     // Graphical elements
     private TitleContainerPanel titleContainerPanel;
@@ -16,10 +15,10 @@ public class SwingIOEngine implements IOEngine {
     private MainPanel mainPanel;
     private MainFrame mainFrame;
 
-    public SwingIOEngine(Integer totalRows, Integer totalCols, Integer totalFlags, Controller controller) {
-        this.controller = controller;
+    public SwingIOEngine(Integer totalRows, Integer totalCols, Integer totalFlags, PlayerActionHandler actionHandler) {
+        this.actionHandler = actionHandler;
         titleContainerPanel = new TitleContainerPanel();
-        boardPanel = new BoardPanel(totalRows, totalCols, controller);
+        boardPanel = new BoardPanel(totalRows, totalCols, actionHandler);
         boardContainerPanel = new BoardContainerPanel(boardPanel);
         controlContainerPanel = new ControlContainerPanel(totalFlags, totalFlags, 0);
 

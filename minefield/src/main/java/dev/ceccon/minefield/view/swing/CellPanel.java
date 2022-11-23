@@ -5,7 +5,6 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Random;
 
 public class CellPanel extends JPanel {
 
@@ -53,7 +52,7 @@ public class CellPanel extends JPanel {
                     // TODO: Create enum to map button numbers semantically
                     case 1:
                     case 3:
-                        board.cellCickedWith(x, y, buttonPressed);
+                        board.cellClickedWith(x, y, buttonPressed);
                     default:
                         System.out.println("Could not recognize button clicked, identifier: " + buttonPressed);
 
