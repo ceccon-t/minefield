@@ -19,7 +19,7 @@ public class Controller {
     private IOEngine ioEngine;
 
     public Controller() {
-        this.ioEngine = IOEngineFactory.createEngine(numRows, numCols, totalFlags, this, IOEngines.DEFAULT_ENGINE);
+        this.ioEngine = IOEngineFactory.buildEngine(numRows, numCols, totalFlags, this, IOEngines.DEFAULT_ENGINE);
     }
 
     public void handlePlayerActionOn(PlayerAction action, int x, int y) {
