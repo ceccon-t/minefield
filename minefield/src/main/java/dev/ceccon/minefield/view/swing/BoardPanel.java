@@ -11,11 +11,15 @@ public class BoardPanel extends JPanel {
     private static final int BOARD_OUTER_BORDER_THICKNESS = 5;
 
     PlayerActionHandler actionHandler;
+    private int totalRows;
+    private int totalCols;
     private CellPanel[][] cells;
 
     public BoardPanel(int rows, int cols, PlayerActionHandler actionHandler) {
-        this.cells = new CellPanel[rows][cols];
         this.actionHandler = actionHandler;
+        this.totalRows = rows;
+        this.totalCols = cols;
+        this.cells = new CellPanel[rows][cols];
 
         setLayout(new GridBagLayout());
 
@@ -67,5 +71,13 @@ public class BoardPanel extends JPanel {
     public void displayAsMine(int x, int y) {
         CellPanel cell = cells[x][y];
         cell.displayMine();
+    }
+
+    public void hideAll() {
+        for (int i = 0; i < totalRows; i++) {
+            for (int j = 0; j < totalCols; j++) {
+                displayAsHidden(i, j);
+            }
+        }
     }
 }

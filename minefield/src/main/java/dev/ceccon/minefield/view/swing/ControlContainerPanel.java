@@ -1,5 +1,7 @@
 package dev.ceccon.minefield.view.swing;
 
+import dev.ceccon.minefield.controller.PlayerActionHandler;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -13,15 +15,20 @@ public class ControlContainerPanel extends JPanel {
     JLabel currentStateLabel;
     JLabel scoreLabel;
 
-    public ControlContainerPanel(Integer initialRemainingFlags, Integer initialTotalFlags, Integer initialScore) {
+    public ControlContainerPanel(Integer initialRemainingFlags, Integer initialTotalFlags, Integer initialScore, PlayerActionHandler actionHandler) {
         this.newGameButton = new JButton("New Game");
         this.currentStateLabel = new JLabel(buildFlagsDisplayText(initialRemainingFlags, initialTotalFlags));
         this.scoreLabel = new JLabel(initialScore.toString());
 
         setLayout(new BorderLayout());
+
         add(newGameButton, BorderLayout.NORTH);
         add(currentStateLabel, BorderLayout.WEST);
         add(scoreLabel, BorderLayout.EAST);
+
+        newGameButton.addActionListener(e -> {
+            actionHandler.handlePlayerRestart();
+        });
     }
 
     public void setRemainingFlagsDisplay(Integer remainingFlags, Integer totalFlags) {

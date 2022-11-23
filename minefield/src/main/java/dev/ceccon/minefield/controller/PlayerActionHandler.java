@@ -6,4 +6,6 @@ public interface PlayerActionHandler {
 
     void handlePlayerActionOnCell(PlayerAction action, int x, int y);
 
+    void handlePlayerRestart();
+
 }

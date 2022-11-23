@@ -9,18 +9,22 @@ import java.util.Random;
 
 public class Controller implements PlayerActionHandler {
 
+    private static final int TOTAL_FLAGS = 10;
+
     private int numRows = 15;
     private int numCols = 25;
 
-    private int totalFlags = 10;
-    private int remainingFlags = 10;
-    private int score = 42;
+    private int totalFlags;
+    private int remainingFlags;
+    private int score = 0;
 
     private boolean playing = true;
 
     private IOEngine ioEngine;
 
     public Controller() {
+        this.totalFlags = TOTAL_FLAGS;
+        this.remainingFlags = TOTAL_FLAGS;
         this.ioEngine = IOEngineFactory.buildEngine(numRows, numCols, totalFlags, this, IOEngines.DEFAULT_ENGINE);
     }
 
@@ -51,5 +55,13 @@ public class Controller implements PlayerActionHandler {
                 ioEngine.displayAsFlagged(x, y);
                 break;
         }
+    }
+
+    @Override
+    public void handlePlayerRestart() {
+        remainingFlags = TOTAL_FLAGS;
+        score = 0;
+        playing = true;
+        ioEngine.restartUI();
     }
 }

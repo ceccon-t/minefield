@@ -18,4 +18,6 @@ public interface IOEngine {
 
     void updateScoreDisplay(Integer score);
 
+    void restartUI();
+
 }
