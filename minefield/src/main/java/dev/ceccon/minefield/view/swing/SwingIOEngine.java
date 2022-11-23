@@ -89,4 +89,10 @@ public class SwingIOEngine implements IOEngine {
         displayRemainingFlagsMessage(totalFlags, totalFlags);
         updateScoreDisplay(0);
     }
+
+    @Override
+    public void changeBoardSize(Integer rows, Integer columns) {
+        boardPanel.setBoardSize(rows, columns);
+    }
+
 }

@@ -23,23 +23,47 @@ public class BoardPanel extends JPanel {
 
         setLayout(new GridBagLayout());
 
-        GridBagConstraints constraints = new GridBagConstraints();
+        generateCells();
+        addCellsToView();
 
+        setBorder(BorderFactory.createLineBorder(Color.BLACK, BOARD_OUTER_BORDER_THICKNESS));
+    }
+
+    private void generateCells() {
+        cells = new CellPanel[totalRows][totalCols];
+        for (int i = 0; i < totalRows; i++) {
+            for (int j = 0; j < totalCols; j++) {
+                CellPanel cell = new CellPanel(i, j, " ", this);
+                cells[i][j] = cell;
+            }
+       }
+    }
+
+    private void addCellsToView() {
+        GridBagConstraints constraints = new GridBagConstraints();
         constraints.gridx = 0;
         constraints.gridy = 0;
-
-        for (int i = 0; i < rows; i++) {
+        for (int i = 0; i < totalRows; i++) {
             constraints.gridx = 0;
-            for (int j = 0; j < cols; j++) {
-                CellPanel cell = new CellPanel(i, j, " ", this);
-                add(cell, constraints);
-                this.cells[i][j] = cell;
+            for (int j = 0; j < totalCols; j++) {
+                add(cells[i][j], constraints);
                 constraints.gridx++;
             }
             constraints.gridy++;
         }
+    }
 
-        setBorder(BorderFactory.createLineBorder(Color.BLACK, BOARD_OUTER_BORDER_THICKNESS));
+    private void removeCellsFromView() {
+        removeAll();
+    }
+
+    public void setBoardSize(int rows, int cols) {
+        this.totalRows = rows;
+        this.totalCols = cols;
+        removeCellsFromView();
+        generateCells();
+        addCellsToView();
+        revalidate();
     }
 
     public void cellClickedWith(int x, int y, int buttonNumber) {

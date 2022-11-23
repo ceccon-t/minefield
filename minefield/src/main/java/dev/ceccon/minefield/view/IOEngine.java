@@ -20,4 +20,6 @@ public interface IOEngine {
 
     void restartUI();
 
+    void changeBoardSize(Integer rows, Integer columns);
+
 }
