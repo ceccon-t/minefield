@@ -1,5 +1,6 @@
 package dev.ceccon.minefield.controller;
 
+import dev.ceccon.minefield.constants.Difficulty;
 import dev.ceccon.minefield.constants.PlayerAction;
 import dev.ceccon.minefield.view.IOEngine;
 import dev.ceccon.minefield.view.IOEngineFactory;
@@ -11,8 +12,8 @@ public class Controller implements PlayerActionHandler {
 
     private static final int TOTAL_FLAGS = 10;
 
-    private int numRows = 15;
-    private int numCols = 25;
+    private int numRows;
+    private int numCols;
 
     private int totalFlags;
     private int remainingFlags;
@@ -20,12 +21,35 @@ public class Controller implements PlayerActionHandler {
 
     private boolean playing = true;
 
+    private Difficulty currentDifficulty = Difficulty.INTERMEDIATE;
+
     private IOEngine ioEngine;
 
     public Controller() {
-        this.totalFlags = TOTAL_FLAGS;
-        this.remainingFlags = TOTAL_FLAGS;
+        configureForCurrentDifficulty();
+        remainingFlags = totalFlags;
+
         this.ioEngine = IOEngineFactory.buildEngine(numRows, numCols, totalFlags, this, IOEngines.DEFAULT_ENGINE);
+    }
+
+    private void configureForCurrentDifficulty() {
+        switch (currentDifficulty) {
+            case BEGINNER:
+                numRows = 10;
+                numCols = 15;
+                totalFlags = 15;
+                break;
+            case INTERMEDIATE:
+                numRows = 15;
+                numCols = 20;
+                totalFlags = 50;
+                break;
+            case EXPERT:
+                numRows = 15;
+                numCols = 25;
+                totalFlags = 90;
+                break;
+        }
     }
 
     @Override
@@ -59,9 +83,28 @@ public class Controller implements PlayerActionHandler {
 
     @Override
     public void handlePlayerRestart() {
-        remainingFlags = TOTAL_FLAGS;
+        restart();
+    }
+
+    private void restart() {
+        remainingFlags = totalFlags;
         score = 0;
         playing = true;
+
+        ioEngine.displayRemainingFlagsMessage(remainingFlags, totalFlags);
         ioEngine.restartUI();
     }
+
+    @Override
+    public void handlePlayerChangeDifficulty(Difficulty difficulty) {
+        if (difficulty == currentDifficulty) return;
+
+        currentDifficulty = difficulty;
+        configureForCurrentDifficulty();
+
+        ioEngine.changeBoardSize(numRows, numCols);
+        restart();
+    }
+
+
 }

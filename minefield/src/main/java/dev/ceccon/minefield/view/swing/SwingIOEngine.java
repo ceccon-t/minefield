@@ -4,6 +4,8 @@ import dev.ceccon.minefield.controller.PlayerActionHandler;
 import dev.ceccon.minefield.view.IOEngine;
 import dev.ceccon.minefield.view.swing.graphical.*;
 
+import javax.swing.*;
+
 public class SwingIOEngine implements IOEngine {
 
     PlayerActionHandler actionHandler;
@@ -14,6 +16,7 @@ public class SwingIOEngine implements IOEngine {
     private BoardContainerPanel boardContainerPanel;
     private ControlContainerPanel controlContainerPanel;
     private MainPanel mainPanel;
+    private JMenuBar menuBar;
     private MainFrame mainFrame;
 
     private int totalRows;
@@ -39,7 +42,10 @@ public class SwingIOEngine implements IOEngine {
 
         mainPanel = new MainPanel(titleContainerPanel, boardContainerPanel, controlContainerPanel);
 
+        menuBar = new MenuBar(actionHandler);
+
         mainFrame.setSize(800,625);
+        mainFrame.setJMenuBar(menuBar);
         mainFrame.setContentPane(mainPanel);
     }
 
@@ -86,7 +92,6 @@ public class SwingIOEngine implements IOEngine {
     @Override
     public void restartUI() {
         boardPanel.hideAll();
-        displayRemainingFlagsMessage(totalFlags, totalFlags);
         updateScoreDisplay(0);
     }
 
