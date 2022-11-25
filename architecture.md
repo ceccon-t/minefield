@@ -21,5 +21,5 @@ More info soon...
 
 [Swing](https://docs.oracle.com/javase/tutorial/uiswing/) as the GUI framework.
 
-[JUnit](https://github.com/junit-team/junit4/wiki/Getting-started) for automated tests.
+[JUnit](https://junit.org/junit5/docs/current/user-guide/) for automated tests.
 
