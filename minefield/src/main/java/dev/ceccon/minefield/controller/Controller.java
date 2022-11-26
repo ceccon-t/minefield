@@ -3,9 +3,7 @@ package dev.ceccon.minefield.controller;
 import dev.ceccon.minefield.constants.CellState;
 import dev.ceccon.minefield.constants.Difficulty;
 import dev.ceccon.minefield.constants.PlayerAction;
-import dev.ceccon.minefield.model.Cell;
-import dev.ceccon.minefield.model.DifficultyConfiguration;
-import dev.ceccon.minefield.model.Field;
+import dev.ceccon.minefield.model.*;
 import dev.ceccon.minefield.view.IOEngine;
 import dev.ceccon.minefield.view.IOEngineFactory;
 import dev.ceccon.minefield.view.IOEngines;
@@ -24,6 +22,8 @@ public class Controller implements PlayerActionHandler {
     private Difficulty currentDifficulty = Difficulty.BEGINNER;
     private DifficultyConfiguration difficultyConfig;
 
+    private MineSeeder mineSeeder;
+
     private Field field;
 
     private IOEngine ioEngine;
@@ -31,6 +31,7 @@ public class Controller implements PlayerActionHandler {
     public Controller() {
         configureForCurrentDifficulty();
         remainingFlags = difficultyConfig.totalFlags();
+        mineSeeder = new SimpleRandomMineSeeder();
 
         createField();
 
@@ -47,11 +48,7 @@ public class Controller implements PlayerActionHandler {
     }
 
     private void seedFieldWithMines() {
-        for (int i = 0; i < difficultyConfig.rows(); i++) {
-            for (int j = 0; j < difficultyConfig.columns(); j++) {
-                if (i == j) field.setMineOn(i, j);  // Diagonal mines for debug
-            }
-        }
+        mineSeeder.seedMines(field, difficultyConfig);
     }
 
     private void configureForCurrentDifficulty() {
