@@ -4,6 +4,7 @@ import dev.ceccon.minefield.constants.CellState;
 import dev.ceccon.minefield.constants.Difficulty;
 import dev.ceccon.minefield.constants.PlayerAction;
 import dev.ceccon.minefield.model.Cell;
+import dev.ceccon.minefield.model.DifficultyConfiguration;
 import dev.ceccon.minefield.model.Field;
 import dev.ceccon.minefield.view.IOEngine;
 import dev.ceccon.minefield.view.IOEngineFactory;
@@ -15,16 +16,13 @@ public class Controller implements PlayerActionHandler {
 
     private static final int TOTAL_FLAGS = 10;
 
-    private int numRows;
-    private int numCols;
-
-    private int totalFlags;
     private int remainingFlags;
     private int score = 0;
 
     private boolean playing = true;
 
-    private Difficulty currentDifficulty = Difficulty.INTERMEDIATE;
+    private Difficulty currentDifficulty = Difficulty.BEGINNER;
+    private DifficultyConfiguration difficultyConfig;
 
     private Field field;
 
@@ -32,44 +30,32 @@ public class Controller implements PlayerActionHandler {
 
     public Controller() {
         configureForCurrentDifficulty();
-        remainingFlags = totalFlags;
+        remainingFlags = difficultyConfig.totalFlags();
 
         createField();
 
-        this.ioEngine = IOEngineFactory.buildEngine(numRows, numCols, totalFlags, this, IOEngines.DEFAULT_ENGINE);
+        this.ioEngine = IOEngineFactory.buildEngine(difficultyConfig.rows(),
+                difficultyConfig.columns(),
+                difficultyConfig.totalFlags(),
+                this,
+                IOEngines.DEFAULT_ENGINE);
     }
 
     private void createField() {
-        this.field = new Field(numRows, numCols);
+        this.field = new Field(difficultyConfig.rows(), difficultyConfig.columns());
         seedFieldWithMines();
     }
 
     private void seedFieldWithMines() {
-        for (int i = 0; i < numRows; i++) {
-            for (int j = 0; j < numCols; j++) {
+        for (int i = 0; i < difficultyConfig.rows(); i++) {
+            for (int j = 0; j < difficultyConfig.columns(); j++) {
                 if (i == j) field.setMineOn(i, j);  // Diagonal mines for debug
             }
         }
     }
 
     private void configureForCurrentDifficulty() {
-        switch (currentDifficulty) {
-            case BEGINNER:
-                numRows = 10;
-                numCols = 15;
-                totalFlags = 15;
-                break;
-            case INTERMEDIATE:
-                numRows = 15;
-                numCols = 20;
-                totalFlags = 50;
-                break;
-            case EXPERT:
-                numRows = 15;
-                numCols = 25;
-                totalFlags = 90;
-                break;
-        }
+        difficultyConfig = DifficultyConfiguration.create(currentDifficulty);
     }
 
     private void updateCellDisplay(Cell cell) {
@@ -89,8 +75,8 @@ public class Controller implements PlayerActionHandler {
     }
 
     private void showAllMines() {
-        for (int i = 0; i < numRows; i++) {
-            for (int j = 0; j < numCols; j++) {
+        for (int i = 0; i < difficultyConfig.rows(); i++) {
+            for (int j = 0; j < difficultyConfig.columns(); j++) {
                 Cell cell = field.getCell(i, j);
                 if (cell.isMine()) ioEngine.displayAsMine(i, j);
             }
@@ -105,15 +91,18 @@ public class Controller implements PlayerActionHandler {
         switch (action) {
             case ACTION_OPEN:
                 if (cell.isMine()) {
-                    showAllMines();
-                    ioEngine.displayDefeatMessage();
-                    playing = false;
+                    processDefeat();
                     return;
                 }
-                // TODO: handle checking if player won
-                // TODO: handle opening flagged cell
+                if (cell.getState().equals(CellState.FLAGGED)) {
+                    remainingFlags++;
+                    ioEngine.displayRemainingFlagsMessage(remainingFlags, difficultyConfig.totalFlags());
+                }
                 cell.setState(CellState.OPEN);
                 updateCellDisplay(field.getCell(x, y));
+                if (playerWon()) {
+                    processVictory();
+                }
                 break;
             case ACTION_FLAG:
                 if (remainingFlags < 1) return;
@@ -121,12 +110,12 @@ public class Controller implements PlayerActionHandler {
                     remainingFlags++;
                     cell.setState(CellState.HIDDEN);
                     updateCellDisplay(cell);
-                    ioEngine.displayRemainingFlagsMessage(remainingFlags, totalFlags);
+                    ioEngine.displayRemainingFlagsMessage(remainingFlags, difficultyConfig.totalFlags());
                 } else if (cell.getState().equals(CellState.HIDDEN)) {
                     remainingFlags--;
                     cell.setState(CellState.FLAGGED);
                     updateCellDisplay(cell);
-                    ioEngine.displayRemainingFlagsMessage(remainingFlags, totalFlags);
+                    ioEngine.displayRemainingFlagsMessage(remainingFlags, difficultyConfig.totalFlags());
                 }
                 break;
         }
@@ -138,14 +127,35 @@ public class Controller implements PlayerActionHandler {
     }
 
     private void restart() {
-        remainingFlags = totalFlags;
+        remainingFlags = difficultyConfig.totalFlags();
         score = 0;
         playing = true;
 
         createField();
 
-        ioEngine.displayRemainingFlagsMessage(remainingFlags, totalFlags);
+        ioEngine.displayRemainingFlagsMessage(remainingFlags, difficultyConfig.totalFlags());
         ioEngine.restartUI();
+    }
+
+    private void processDefeat() {
+        showAllMines();
+        ioEngine.displayDefeatMessage();
+        playing = false;
+    }
+
+    private boolean playerWon() {
+        for (int i = 0; i < difficultyConfig.rows(); i++) {
+            for (int j = 0; j < difficultyConfig.columns(); j++) {
+                Cell cell = field.getCell(i, j);
+                if (cell.getState().equals(CellState.HIDDEN)) return false;
+            }
+        }
+        return true;
+    }
+
+    private void processVictory() {
+        ioEngine.displayVictoryMessage();
+        playing = false;
     }
 
     @Override
@@ -155,7 +165,7 @@ public class Controller implements PlayerActionHandler {
         currentDifficulty = difficulty;
         configureForCurrentDifficulty();
 
-        ioEngine.changeBoardSize(numRows, numCols);
+        ioEngine.changeBoardSize(difficultyConfig.rows(), difficultyConfig.columns());
         restart();
     }
 
