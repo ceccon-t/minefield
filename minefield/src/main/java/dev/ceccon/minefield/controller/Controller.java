@@ -10,7 +10,7 @@ import dev.ceccon.minefield.view.IOEngine;
 import dev.ceccon.minefield.view.IOEngineFactory;
 import dev.ceccon.minefield.view.IOEngines;
 
-import java.util.Random;
+import java.util.*;
 
 public class Controller implements PlayerActionHandler {
 
@@ -98,8 +98,7 @@ public class Controller implements PlayerActionHandler {
                     remainingFlags++;
                     ioEngine.displayRemainingFlagsMessage(remainingFlags, difficultyConfig.totalFlags());
                 }
-                cell.setState(CellState.OPEN);
-                updateCellDisplay(field.getCell(x, y));
+                openClearingAround(cell);
                 if (playerWon()) {
                     processVictory();
                 }
@@ -116,6 +115,9 @@ public class Controller implements PlayerActionHandler {
                     cell.setState(CellState.FLAGGED);
                     updateCellDisplay(cell);
                     ioEngine.displayRemainingFlagsMessage(remainingFlags, difficultyConfig.totalFlags());
+                    if (playerWon()) {
+                        processVictory();
+                    }
                 }
                 break;
         }
@@ -156,6 +158,30 @@ public class Controller implements PlayerActionHandler {
     private void processVictory() {
         ioEngine.displayVictoryMessage();
         playing = false;
+    }
+
+    private void openClearingAround(Cell start) {
+        Queue<Cell> toOpen = new LinkedList<>();
+        Set<Cell> processed = new HashSet<>();
+
+        toOpen.add(start);
+
+        do {
+            Cell current = toOpen.remove();
+            if (processed.contains(current)) continue;
+            processed.add(current);
+
+            current.setState(CellState.OPEN);
+
+            if (current.getAdjacentMines() == 0) {
+                toOpen.addAll(field.getAllAdjacentCells(current.getX(), current.getY()));
+            }
+        } while(!toOpen.isEmpty());
+
+        for (Cell c : processed) {
+            updateCellDisplay(c);
+        }
+
     }
 
     @Override
