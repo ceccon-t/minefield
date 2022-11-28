@@ -8,14 +8,19 @@ import dev.ceccon.minefield.view.IOEngine;
 import dev.ceccon.minefield.view.IOEngineFactory;
 import dev.ceccon.minefield.view.IOEngines;
 
+import javax.swing.Timer;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.*;
 
 public class Controller implements PlayerActionHandler {
 
     private static final int TOTAL_FLAGS = 10;
+    private static final int ONE_SECOND_IN_MS = 1000;
 
     private int remainingFlags;
     private int score = 0;
+    private Timer scoreTimer;
 
     private boolean playing = true;
 
@@ -40,6 +45,13 @@ public class Controller implements PlayerActionHandler {
                 difficultyConfig.totalFlags(),
                 this,
                 IOEngines.DEFAULT_ENGINE);
+
+        scoreTimer = createScoreTimer(ONE_SECOND_IN_MS);
+        scoreTimer.start();
+    }
+
+    private void configureForCurrentDifficulty() {
+        difficultyConfig = DifficultyConfiguration.create(currentDifficulty);
     }
 
     private void createField() {
@@ -51,8 +63,21 @@ public class Controller implements PlayerActionHandler {
         mineSeeder.seedMines(field, difficultyConfig);
     }
 
-    private void configureForCurrentDifficulty() {
-        difficultyConfig = DifficultyConfiguration.create(currentDifficulty);
+    private Timer createScoreTimer(int interval) {
+        return new Timer(interval, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                if (playing) {
+                    score++;
+                    ioEngine.updateScoreDisplay(score);
+                }
+            }
+        });
+    }
+
+    private void stopGame() {
+        playing = false;
+        scoreTimer.stop();
     }
 
     private void updateCellDisplay(Cell cell) {
@@ -129,6 +154,7 @@ public class Controller implements PlayerActionHandler {
         remainingFlags = difficultyConfig.totalFlags();
         score = 0;
         playing = true;
+        scoreTimer.restart();
 
         createField();
 
@@ -139,7 +165,7 @@ public class Controller implements PlayerActionHandler {
     private void processDefeat() {
         showAllMines();
         ioEngine.displayDefeatMessage();
-        playing = false;
+        stopGame();
     }
 
     private boolean playerWon() {
@@ -154,7 +180,7 @@ public class Controller implements PlayerActionHandler {
 
     private void processVictory() {
         ioEngine.displayVictoryMessage();
-        playing = false;
+        stopGame();
     }
 
     private void openClearingAround(Cell start) {
