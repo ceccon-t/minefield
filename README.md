@@ -32,4 +32,4 @@ This is a simple Maven project, so the easiest way to build it is running `mvn c
 
 ## More info
 
-To get a short intro to how the code is organzied, you can check `architecture.md`.
+To get a short intro to how the code is organized, you can check `architecture.md`.
