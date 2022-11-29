@@ -49,12 +49,12 @@ public class CellPanel extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 int buttonPressed = e.getButton();
 
-                System.out.println("Button " + buttonPressed + " clicked on cell (" + x + ", " + y + ").");
                 switch(buttonPressed) {
                     // TODO: Create enum to map button numbers semantically
                     case 1:
                     case 3:
                         board.cellClickedWith(x, y, buttonPressed);
+                        break;
                     default:
                         System.out.println("Could not recognize button clicked, identifier: " + buttonPressed);
 
