@@ -24,7 +24,7 @@ public class Controller implements PlayerActionHandler {
 
     private boolean playing = true;
 
-    private Difficulty currentDifficulty = Difficulty.BEGINNER;
+    private Difficulty currentDifficulty = Difficulty.INTERMEDIATE;
     private DifficultyConfiguration difficultyConfig;
 
     private MineSeeder mineSeeder;
