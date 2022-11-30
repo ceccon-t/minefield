@@ -3,12 +3,20 @@ package dev.ceccon.minefield.view.swing;
 import dev.ceccon.minefield.controller.PlayerActionHandler;
 import dev.ceccon.minefield.view.IOEngine;
 import dev.ceccon.minefield.view.swing.graphical.*;
+import dev.ceccon.minefield.view.swing.language.LanguageProvider;
+import dev.ceccon.minefield.view.swing.language.Languages;
 
 import javax.swing.*;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class SwingIOEngine implements IOEngine {
 
-    PlayerActionHandler actionHandler;
+    // Game title should not change regardless of language
+    private static final String GAME_TITLE = "Minefield";
+
+    private PlayerActionHandler actionHandler;
+    private LanguageProvider languageProvider;
 
     // Graphical elements
     private TitleContainerPanel titleContainerPanel;
@@ -29,20 +37,23 @@ public class SwingIOEngine implements IOEngine {
         this.totalCols = totalCols;
         this.totalFlags = totalFlags;
 
-        mainFrame = new MainFrame("Minefield");
+        languageProvider = new LanguageProvider();
+
+        mainFrame = new MainFrame(GAME_TITLE);
         mainFrame.setVisible(true);
         initializeGraphicalElements();
+
     }
 
     private void initializeGraphicalElements() {
-        titleContainerPanel = new TitleContainerPanel();
+        titleContainerPanel = new TitleContainerPanel(GAME_TITLE);
         boardPanel = new BoardPanel(totalRows, totalCols, actionHandler);
         boardContainerPanel = new BoardContainerPanel(boardPanel);
-        controlContainerPanel = new ControlContainerPanel(totalFlags, totalFlags, 0, actionHandler);
+        controlContainerPanel = new ControlContainerPanel(totalFlags, totalFlags, 0, actionHandler, languageProvider);
 
         mainPanel = new MainPanel(titleContainerPanel, boardContainerPanel, controlContainerPanel);
 
-        menuBar = new MenuBar(actionHandler);
+        menuBar = new MenuBar(actionHandler, languageProvider);
 
         mainFrame.setSize(800,625);
         mainFrame.setJMenuBar(menuBar);

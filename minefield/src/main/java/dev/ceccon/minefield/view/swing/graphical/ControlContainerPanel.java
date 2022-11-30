@@ -1,22 +1,32 @@
 package dev.ceccon.minefield.view.swing.graphical;
 
 import dev.ceccon.minefield.controller.PlayerActionHandler;
+import dev.ceccon.minefield.view.swing.language.LanguageObserver;
+import dev.ceccon.minefield.view.swing.language.LanguageProvider;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class ControlContainerPanel extends JPanel {
+public class ControlContainerPanel extends JPanel implements LanguageObserver {
 
-    private static final String FLAGS_PREFIX = "Flags";
-    private static final String VICTORY_MESSAGE_TEXT = "You won!";
-    private static final String DEFEAT_MESSAGE_TEXT = "You lost!";
+    private static final String FLAGS_LABEL_PREFIX_ID = "FLAGS_LABEL_PREFIX";
+    private Integer lastFlagsRemaining;
+    private Integer lastFlagsTotal;
+    private static final String VICTORY_MESSAGE_ID = "VICTORY_MESSAGE";
+    private static final String DEFEAT_MESSAGE_ID = "DEFEAT_MESSAGE";
+
+    private static final String NEW_GAME_BUTTON_LABEL_ID = "NEW_GAME_BUTTON";
+
+    private LanguageProvider languageProvider;
 
     JButton newGameButton;
     JLabel currentStateLabel;
     JLabel scoreLabel;
 
-    public ControlContainerPanel(Integer initialRemainingFlags, Integer initialTotalFlags, Integer initialScore, PlayerActionHandler actionHandler) {
-        this.newGameButton = new JButton("New Game");
+    public ControlContainerPanel(Integer initialRemainingFlags, Integer initialTotalFlags, Integer initialScore, PlayerActionHandler actionHandler, LanguageProvider languageProvider) {
+        this.languageProvider = languageProvider;
+
+        this.newGameButton = new JButton(languageProvider.getString(NEW_GAME_BUTTON_LABEL_ID));
         this.currentStateLabel = new JLabel(buildFlagsDisplayText(initialRemainingFlags, initialTotalFlags));
         this.scoreLabel = new JLabel(initialScore.toString());
 
@@ -29,6 +39,8 @@ public class ControlContainerPanel extends JPanel {
         newGameButton.addActionListener(e -> {
             actionHandler.handlePlayerRestart();
         });
+
+        languageProvider.registerObserver(this);
     }
 
     public void setRemainingFlagsDisplay(Integer remainingFlags, Integer totalFlags) {
@@ -36,20 +48,26 @@ public class ControlContainerPanel extends JPanel {
     }
 
     private String buildFlagsDisplayText(Integer remaining, Integer total) {
-        return FLAGS_PREFIX + ": " + remaining + "/" + total;
+        lastFlagsRemaining = remaining;
+        lastFlagsTotal = total;
+        return languageProvider.getString(FLAGS_LABEL_PREFIX_ID) + remaining + "/" + total;
     }
 
     public void displayVictoryMessage() {
-        currentStateLabel.setText(VICTORY_MESSAGE_TEXT);
+        currentStateLabel.setText(languageProvider.getString(VICTORY_MESSAGE_ID));
     }
 
     public void displayDefeatMessage() {
-        currentStateLabel.setText(DEFEAT_MESSAGE_TEXT);
+        currentStateLabel.setText(languageProvider.getString(DEFEAT_MESSAGE_ID));
     }
 
     public void updateScoreDisplay(Integer score) {
         scoreLabel.setText(score.toString());
     }
 
-
+    @Override
+    public void onLanguageChanged() {
+        newGameButton.setText(languageProvider.getString(NEW_GAME_BUTTON_LABEL_ID));
+        setRemainingFlagsDisplay(lastFlagsRemaining, lastFlagsTotal); // TODO: Change to use currently displayed message (victory/defeat/state)
+    }
 }
