@@ -1,4 +1,4 @@
-package dev.ceccon.minefield.view.swing.graphical;
+package dev.ceccon.minefield.view.swing.graphical.menu;
 
 import dev.ceccon.minefield.constants.Difficulty;
 import dev.ceccon.minefield.controller.PlayerActionHandler;
@@ -14,12 +14,6 @@ public class MenuBar extends JMenuBar implements LanguageObserver {
     private LanguageProvider languageProvider;
 
     // Keep reference of items with labels to allow changing language.
-    // File Menu
-    private JMenu fileMenu;
-    private JMenuItem exitItem;
-    private static final String MENU_BAR_FILE_ID = "MENU_BAR_FILE";
-    private static final String MENU_BAR_FILE_EXIT_ID = "MENU_BAR_FILE_EXIT";
-
     // Difficulty
     private JMenu difficultyMenu;
     private JMenuItem beginnerItem;
@@ -50,16 +44,7 @@ public class MenuBar extends JMenuBar implements LanguageObserver {
     }
 
     private JMenu createFileMenu() {
-        fileMenu = new JMenu(languageProvider.getString(MENU_BAR_FILE_ID));
-        exitItem = new JMenuItem(languageProvider.getString(MENU_BAR_FILE_EXIT_ID));
-
-        exitItem.addActionListener(e -> {
-            System.exit(0);
-        });
-
-        fileMenu.add(exitItem);
-
-        return fileMenu;
+        return new FileMenu(languageProvider);
     }
 
     private JMenu createDifficultyMenu() {
@@ -97,10 +82,6 @@ public class MenuBar extends JMenuBar implements LanguageObserver {
 
     @Override
     public void onLanguageChanged() {
-        // File Menu
-        fileMenu.setText(languageProvider.getString(MENU_BAR_FILE_ID));
-        exitItem.setText(languageProvider.getString(MENU_BAR_FILE_EXIT_ID));
-
         // Difficulty Menu
         difficultyMenu.setText(languageProvider.getString(MENU_BAR_DIFFICULTY_ID));
         beginnerItem.setText(languageProvider.getString(MENU_BAR_DIFFICULTY_BEGINNER_ID));
