@@ -1,4 +1,4 @@
-package dev.ceccon.minefield.view.swing.graphical;
+package dev.ceccon.minefield.view.swing.graphical.control;
 
 import dev.ceccon.minefield.controller.PlayerActionHandler;
 import dev.ceccon.minefield.view.swing.language.LanguageObserver;

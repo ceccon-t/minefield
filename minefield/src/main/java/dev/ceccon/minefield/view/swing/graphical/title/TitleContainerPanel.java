@@ -1,4 +1,4 @@
-package dev.ceccon.minefield.view.swing.graphical;
+package dev.ceccon.minefield.view.swing.graphical.title;
 
 import javax.swing.*;
 import java.awt.*;

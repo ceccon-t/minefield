@@ -3,7 +3,11 @@ package dev.ceccon.minefield.view.swing;
 import dev.ceccon.minefield.controller.PlayerActionHandler;
 import dev.ceccon.minefield.view.IOEngine;
 import dev.ceccon.minefield.view.swing.graphical.*;
+import dev.ceccon.minefield.view.swing.graphical.board.BoardContainerPanel;
+import dev.ceccon.minefield.view.swing.graphical.board.BoardPanel;
+import dev.ceccon.minefield.view.swing.graphical.control.ControlContainerPanel;
 import dev.ceccon.minefield.view.swing.graphical.menu.MenuBar;
+import dev.ceccon.minefield.view.swing.graphical.title.TitleContainerPanel;
 import dev.ceccon.minefield.view.swing.language.LanguageProvider;
 
 import javax.swing.*;
