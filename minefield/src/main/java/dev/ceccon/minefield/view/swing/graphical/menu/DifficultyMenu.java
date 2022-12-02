@@ -1,7 +1,7 @@
 package dev.ceccon.minefield.view.swing.graphical.menu;
 
-import dev.ceccon.minefield.constants.Difficulty;
-import dev.ceccon.minefield.controller.PlayerActionHandler;
+import dev.ceccon.minefield.controller.difficulty.Difficulty;
+import dev.ceccon.minefield.controller.action.PlayerActionHandler;
 import dev.ceccon.minefield.view.swing.language.LanguageObserver;
 import dev.ceccon.minefield.view.swing.language.LanguageProvider;
 

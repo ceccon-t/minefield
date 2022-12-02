@@ -1,7 +1,7 @@
-package dev.ceccon.minefield.controller;
+package dev.ceccon.minefield.controller.action;
 
-import dev.ceccon.minefield.constants.Difficulty;
-import dev.ceccon.minefield.constants.PlayerAction;
+import dev.ceccon.minefield.controller.difficulty.Difficulty;
+import dev.ceccon.minefield.controller.action.PlayerAction;
 
 public interface PlayerActionHandler {
 

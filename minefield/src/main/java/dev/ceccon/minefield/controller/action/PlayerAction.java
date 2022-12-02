@@ -1,4 +1,4 @@
-package dev.ceccon.minefield.constants;
+package dev.ceccon.minefield.controller.action;
 
 public enum PlayerAction {
     ACTION_OPEN,

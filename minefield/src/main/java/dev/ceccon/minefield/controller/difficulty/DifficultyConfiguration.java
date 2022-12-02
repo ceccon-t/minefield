@@ -1,6 +1,4 @@
-package dev.ceccon.minefield.model;
-
-import dev.ceccon.minefield.constants.Difficulty;
+package dev.ceccon.minefield.controller.difficulty;
 
 public class DifficultyConfiguration {
 

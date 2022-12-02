@@ -1,6 +1,6 @@
 package dev.ceccon.minefield.view;
 
-import dev.ceccon.minefield.controller.PlayerActionHandler;
+import dev.ceccon.minefield.controller.action.PlayerActionHandler;
 import dev.ceccon.minefield.view.swing.SwingIOEngine;
 
 public class IOEngineFactory {

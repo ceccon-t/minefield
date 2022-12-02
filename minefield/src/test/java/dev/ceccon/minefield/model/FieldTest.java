@@ -1,6 +1,5 @@
 package dev.ceccon.minefield.model;
 
-import dev.ceccon.minefield.constants.CellState;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

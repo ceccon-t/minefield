@@ -1,7 +1,5 @@
 package dev.ceccon.minefield.model;
 
-import dev.ceccon.minefield.constants.CellState;
-
 import java.util.ArrayList;
 import java.util.List;
 

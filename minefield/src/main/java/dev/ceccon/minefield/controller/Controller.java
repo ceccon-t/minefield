@@ -1,8 +1,11 @@
 package dev.ceccon.minefield.controller;
 
-import dev.ceccon.minefield.constants.CellState;
-import dev.ceccon.minefield.constants.Difficulty;
-import dev.ceccon.minefield.constants.PlayerAction;
+import dev.ceccon.minefield.controller.action.PlayerActionHandler;
+import dev.ceccon.minefield.controller.difficulty.Difficulty;
+import dev.ceccon.minefield.controller.action.PlayerAction;
+import dev.ceccon.minefield.controller.difficulty.DifficultyConfiguration;
+import dev.ceccon.minefield.controller.seeder.MineSeeder;
+import dev.ceccon.minefield.controller.seeder.SimpleRandomMineSeeder;
 import dev.ceccon.minefield.model.*;
 import dev.ceccon.minefield.view.IOEngine;
 import dev.ceccon.minefield.view.IOEngineFactory;

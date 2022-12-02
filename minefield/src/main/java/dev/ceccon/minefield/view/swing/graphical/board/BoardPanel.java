@@ -1,7 +1,7 @@
 package dev.ceccon.minefield.view.swing.graphical.board;
 
-import dev.ceccon.minefield.constants.PlayerAction;
-import dev.ceccon.minefield.controller.PlayerActionHandler;
+import dev.ceccon.minefield.controller.action.PlayerAction;
+import dev.ceccon.minefield.controller.action.PlayerActionHandler;
 
 import javax.swing.*;
 import java.awt.*;

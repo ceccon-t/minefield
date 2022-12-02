@@ -1,4 +1,4 @@
-package dev.ceccon.minefield.constants;
+package dev.ceccon.minefield.model;
 
 public enum CellState {
     HIDDEN,

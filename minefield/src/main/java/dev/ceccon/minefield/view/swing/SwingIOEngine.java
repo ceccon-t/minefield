@@ -1,6 +1,6 @@
 package dev.ceccon.minefield.view.swing;
 
-import dev.ceccon.minefield.controller.PlayerActionHandler;
+import dev.ceccon.minefield.controller.action.PlayerActionHandler;
 import dev.ceccon.minefield.view.IOEngine;
 import dev.ceccon.minefield.view.swing.graphical.*;
 import dev.ceccon.minefield.view.swing.graphical.board.BoardContainerPanel;

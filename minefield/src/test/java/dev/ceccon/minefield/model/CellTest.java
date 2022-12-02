@@ -1,7 +1,5 @@
 package dev.ceccon.minefield.model;
 
-import dev.ceccon.minefield.constants.CellState;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
