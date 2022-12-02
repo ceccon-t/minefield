@@ -22,7 +22,7 @@ public class Controller implements PlayerActionHandler {
 
     private Timer scoreTimer;
 
-    private Difficulty currentDifficulty = Difficulty.INTERMEDIATE;
+    private Difficulty currentDifficulty;
     private DifficultyConfiguration difficultyConfig;
 
     private MineSeeder mineSeeder;
@@ -31,20 +31,24 @@ public class Controller implements PlayerActionHandler {
 
     private IOEngine ioEngine;
 
-    public Controller() {
-        configureForCurrentDifficulty();
+    public Controller(DifficultyConfiguration initialDifficultyConfig) {
+        currentDifficulty = initialDifficultyConfig.difficulty();
+        difficultyConfig = initialDifficultyConfig;
+    }
+
+    public void initialize() {
+        if (ioEngine == null) throw new RuntimeException("Cannot initialize game without an IO engine!");
+
         mineSeeder = new SimpleRandomMineSeeder();
 
         this.game = createGame();
 
-        this.ioEngine = IOEngineFactory.buildEngine(difficultyConfig.rows(),
-                difficultyConfig.columns(),
-                difficultyConfig.totalFlags(),
-                this,
-                IOEngines.DEFAULT_ENGINE);
-
         scoreTimer = createScoreTimer(ONE_SECOND_IN_MS);
         scoreTimer.start();
+    }
+
+    public void setIoEngine(IOEngine engine) {
+        this.ioEngine = engine;
     }
 
     private void configureForCurrentDifficulty() {
