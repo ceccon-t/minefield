@@ -15,30 +15,24 @@ import java.util.*;
 
 public class Controller implements PlayerActionHandler {
 
-    private static final int TOTAL_FLAGS = 10;
     private static final int ONE_SECOND_IN_MS = 1000;
 
-    private int remainingFlags;
-    private int score = 0;
     private Timer scoreTimer;
-
-    private boolean playing = true;
 
     private Difficulty currentDifficulty = Difficulty.INTERMEDIATE;
     private DifficultyConfiguration difficultyConfig;
 
     private MineSeeder mineSeeder;
 
-    private Field field;
+    private Game game;
 
     private IOEngine ioEngine;
 
     public Controller() {
         configureForCurrentDifficulty();
-        remainingFlags = difficultyConfig.totalFlags();
         mineSeeder = new SimpleRandomMineSeeder();
 
-        createField();
+        this.game = createGame();
 
         this.ioEngine = IOEngineFactory.buildEngine(difficultyConfig.rows(),
                 difficultyConfig.columns(),
@@ -54,29 +48,26 @@ public class Controller implements PlayerActionHandler {
         difficultyConfig = DifficultyConfiguration.create(currentDifficulty);
     }
 
-    private void createField() {
-        this.field = new Field(difficultyConfig.rows(), difficultyConfig.columns());
-        seedFieldWithMines();
-    }
-
-    private void seedFieldWithMines() {
-        mineSeeder.seedMines(field, difficultyConfig);
+    private Game createGame() {
+        Game newGame = new Game(difficultyConfig.rows(), difficultyConfig.columns(), difficultyConfig.totalFlags());
+        mineSeeder.seedMines(newGame.getField(), difficultyConfig);
+        return newGame;
     }
 
     private Timer createScoreTimer(int interval) {
         return new Timer(interval, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if (playing) {
-                    score++;
-                    ioEngine.updateScoreDisplay(score);
+                if (game.isPlaying()) {
+                    game.tickTime();
+                    ioEngine.updateScoreDisplay(game.getTimeElapsed());
                 }
             }
         });
     }
 
     private void stopGame() {
-        playing = false;
+        game.setPlaying(false);
         scoreTimer.stop();
     }
 
@@ -97,69 +88,59 @@ public class Controller implements PlayerActionHandler {
     }
 
     private void showAllMines() {
-        for (int i = 0; i < difficultyConfig.rows(); i++) {
-            for (int j = 0; j < difficultyConfig.columns(); j++) {
-                Cell cell = field.getCell(i, j);
-                if (cell.isMine()) ioEngine.displayAsMine(i, j);
-            }
+        for (Cell c : game.getAllMines()) {
+            ioEngine.displayAsMine(c.getX(), c.getY());
         }
     }
 
     @Override
     public void handlePlayerActionOnCell(PlayerAction action, int x, int y) {
-        if (!playing) return;
+        if (!game.isPlaying()) return;
 
-        Cell cell = field.getCell(x, y);
         switch (action) {
             case ACTION_OPEN:
-                if (cell.isMine()) {
-                    processDefeat();
-                    return;
+                Set<Cell> allOpen = game.attemptOpeningFromCell(x, y);
+
+                for (Cell open : allOpen) {
+                    updateCellDisplay(open);
                 }
-                if (cell.getState().equals(CellState.FLAGGED)) {
-                    remainingFlags++;
-                    ioEngine.displayRemainingFlagsMessage(remainingFlags, difficultyConfig.totalFlags());
+
+                if (!game.isPlaying()) {
+                    processEndGame();
+                } else {
+                    ioEngine.displayRemainingFlagsMessage(game.getRemainingFlags(), difficultyConfig.totalFlags());
                 }
-                openClearingAround(cell);
-                if (playerWon()) {
-                    processVictory();
-                }
+
                 break;
+
             case ACTION_FLAG:
-                if (remainingFlags < 1) return;
-                if (cell.getState().equals(CellState.FLAGGED)) {
-                    remainingFlags++;
-                    cell.setState(CellState.HIDDEN);
-                    updateCellDisplay(cell);
-                    ioEngine.displayRemainingFlagsMessage(remainingFlags, difficultyConfig.totalFlags());
-                } else if (cell.getState().equals(CellState.HIDDEN)) {
-                    remainingFlags--;
-                    cell.setState(CellState.FLAGGED);
-                    updateCellDisplay(cell);
-                    ioEngine.displayRemainingFlagsMessage(remainingFlags, difficultyConfig.totalFlags());
-                    if (playerWon()) {
-                        processVictory();
+                boolean changedState = game.attemptFlaggingCell(x, y);
+
+                if (changedState) {
+                    updateCellDisplay(game.getField().getCell(x, y));
+                    if (!game.isPlaying()) {
+                        processEndGame();
+                    } else {
+                        ioEngine.displayRemainingFlagsMessage(game.getRemainingFlags(), difficultyConfig.totalFlags());
                     }
                 }
+
                 break;
         }
+    }
+
+    private void restart() {
+        scoreTimer.restart();
+
+        game = createGame();
+
+        ioEngine.displayRemainingFlagsMessage(game.getRemainingFlags(), difficultyConfig.totalFlags());
+        ioEngine.restartUI();
     }
 
     @Override
     public void handlePlayerRestart() {
         restart();
-    }
-
-    private void restart() {
-        remainingFlags = difficultyConfig.totalFlags();
-        score = 0;
-        playing = true;
-        scoreTimer.restart();
-
-        createField();
-
-        ioEngine.displayRemainingFlagsMessage(remainingFlags, difficultyConfig.totalFlags());
-        ioEngine.restartUI();
     }
 
     private void processDefeat() {
@@ -168,43 +149,17 @@ public class Controller implements PlayerActionHandler {
         stopGame();
     }
 
-    private boolean playerWon() {
-        for (int i = 0; i < difficultyConfig.rows(); i++) {
-            for (int j = 0; j < difficultyConfig.columns(); j++) {
-                Cell cell = field.getCell(i, j);
-                if (cell.getState().equals(CellState.HIDDEN)) return false;
-            }
-        }
-        return true;
-    }
-
     private void processVictory() {
         ioEngine.displayVictoryMessage();
         stopGame();
     }
 
-    private void openClearingAround(Cell start) {
-        Queue<Cell> toOpen = new LinkedList<>();
-        Set<Cell> processed = new HashSet<>();
-
-        toOpen.add(start);
-
-        do {
-            Cell current = toOpen.remove();
-            if (processed.contains(current)) continue;
-            processed.add(current);
-
-            current.setState(CellState.OPEN);
-
-            if (current.getAdjacentMines() == 0) {
-                toOpen.addAll(field.getAllAdjacentCells(current.getX(), current.getY()));
-            }
-        } while(!toOpen.isEmpty());
-
-        for (Cell c : processed) {
-            updateCellDisplay(c);
+    private void processEndGame() {
+        if (game.didPlayerWin()) {
+            processVictory();
+        } else if (game.didPlayerLose()) {
+            processDefeat();
         }
-
     }
 
     @Override
@@ -217,6 +172,5 @@ public class Controller implements PlayerActionHandler {
         ioEngine.changeBoardSize(difficultyConfig.rows(), difficultyConfig.columns());
         restart();
     }
-
 
 }

@@ -1,5 +1,7 @@
 package dev.ceccon.minefield.model;
 
+import dev.ceccon.minefield.constants.CellState;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +52,27 @@ public class Field {
         Cell cell = cells[x][y];
         cell.setMine();
         for (Cell adjacent : getAllAdjacentCells(x, y)) adjacent.incrementAdjacentMines();
+    }
+
+    public List<Cell> getAllCellsContainingMines() {
+        List<Cell> withMines = new ArrayList<>();
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                if (cells[i][j].isMine()) withMines.add(cells[i][j]);
+            }
+        }
+
+        return withMines;
+    }
+
+    public boolean hasAnyHiddenCell() {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                if (cells[i][j].getState().equals(CellState.HIDDEN)) return true;
+            }
+        }
+        return false;
     }
 
 }
