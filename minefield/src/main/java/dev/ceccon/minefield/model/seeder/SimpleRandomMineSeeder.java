@@ -1,7 +1,6 @@
-package dev.ceccon.minefield.controller.seeder;
+package dev.ceccon.minefield.model.seeder;
 
 import dev.ceccon.minefield.controller.difficulty.DifficultyConfiguration;
-import dev.ceccon.minefield.controller.seeder.MineSeeder;
 import dev.ceccon.minefield.model.Cell;
 import dev.ceccon.minefield.model.Field;
 

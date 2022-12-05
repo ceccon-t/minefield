@@ -2,8 +2,8 @@ package dev.ceccon.minefield.model;
 
 import dev.ceccon.minefield.controller.difficulty.Difficulty;
 import dev.ceccon.minefield.controller.difficulty.DifficultyConfiguration;
-import dev.ceccon.minefield.controller.seeder.MineSeeder;
-import dev.ceccon.minefield.controller.seeder.SimpleRandomMineSeeder;
+import dev.ceccon.minefield.model.seeder.MineSeeder;
+import dev.ceccon.minefield.model.seeder.SimpleRandomMineSeeder;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 

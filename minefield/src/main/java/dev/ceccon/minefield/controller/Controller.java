@@ -4,12 +4,10 @@ import dev.ceccon.minefield.controller.action.PlayerActionHandler;
 import dev.ceccon.minefield.controller.difficulty.Difficulty;
 import dev.ceccon.minefield.controller.action.PlayerAction;
 import dev.ceccon.minefield.controller.difficulty.DifficultyConfiguration;
-import dev.ceccon.minefield.controller.seeder.MineSeeder;
-import dev.ceccon.minefield.controller.seeder.SimpleRandomMineSeeder;
+import dev.ceccon.minefield.model.seeder.MineSeeder;
+import dev.ceccon.minefield.model.seeder.SimpleRandomMineSeeder;
 import dev.ceccon.minefield.model.*;
 import dev.ceccon.minefield.view.IOEngine;
-import dev.ceccon.minefield.view.IOEngineFactory;
-import dev.ceccon.minefield.view.IOEngines;
 
 import javax.swing.Timer;
 import java.awt.event.ActionEvent;
