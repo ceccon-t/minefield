@@ -10,6 +10,10 @@ Given a field composed of a grid of cells, the goal of the player is to open the
 
 There are three difficulty modes (Beginner, Intermediate and Expert), each having a specific grid size and number of mines.
 
+Also, there are two available languages: English and Portuguese.
+
+Difficulty and language can be changed through the menu bar in the application.
+
 ![Defeat on Expert](https://raw.githubusercontent.com/ceccon-t/minefield/main/images/minefield_sc1.png "Defeat on Expert")
 
 ![Victory on Beginner](https://raw.githubusercontent.com/ceccon-t/minefield/main/images/minefield_sc2.png "Victory on Beginner")
