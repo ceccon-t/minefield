@@ -2,6 +2,8 @@ package dev.ceccon.minefield.model;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameTest {
@@ -94,6 +96,88 @@ class GameTest {
         boolean playerLost = game.didPlayerLose();
         assertFalse(playerLost, "Player should not have lost if successfully handled all cells");
 
+    }
+
+    @Test
+    void canOpenHiddenCell() {
+        int cellX = 0;
+        int cellY = 0;
+
+        Game game = new Game(2, 2, 2);
+
+        Cell cell = game.getField().getCell(cellX, cellY);
+        assertEquals(CellState.HIDDEN, cell.getState(), "Test was expecting cell to start hidden");
+
+        Set<Cell> allOpen = game.attemptOpeningFromCell(cellX, cellY);
+
+        cell = game.getField().getCell(cellX, cellY);
+        assertEquals(CellState.OPEN, cell.getState(), "Should open hidden cell that had no mines on");
+
+        assertTrue(allOpen.contains(cell), "Should return opened cell");
+    }
+
+    @Test
+    void openingFlaggedCellIncreasesRemainingFlags() {
+        int cellX = 1;
+        int cellY = 0;
+        int mineX = 0;
+        int mineY = 0;
+        int totalFlags = 1;
+
+        Game game = new Game(2, 2, totalFlags);
+
+        // Setting a nearby mine
+        game.getField().setMineOn(mineX, mineY);
+
+        game.attemptFlaggingCell(cellX, cellY);
+
+        int remainingAfterFlagging = game.getRemainingFlags();
+        assertEquals(totalFlags-1, remainingAfterFlagging, "Should have decreased flags after flagging");
+
+        game.attemptOpeningFromCell(cellX, cellY);
+
+        int remainingAfterOpening = game.getRemainingFlags();
+        assertEquals(remainingAfterFlagging+1, remainingAfterOpening, "Should have increased remaining flags after opening a flagged cell");
+    }
+
+    @Test
+    void openingFinalCellLeadsToWin() {
+        int cellX = 1;
+        int cellY = 0;
+
+        Game game = new Game(2, 2, 0);
+
+        // Make all other cells open behind the scenes
+        game.getField().getCell(0, 0).setState(CellState.OPEN);
+        game.getField().getCell(0, 1).setState(CellState.OPEN);
+        game.getField().getCell(1, 1).setState(CellState.OPEN);
+
+        assertTrue(game.isPlaying(), "Game is still playing while there are cells not deal with");
+        assertFalse(game.didPlayerWin(), "Player should not have won before dealing with all cells");
+
+        game.attemptOpeningFromCell(cellX, cellY);
+
+        assertFalse(game.isPlaying(), "Game should stop playing after opening last cell");
+        assertTrue(game.didPlayerWin(), "Player should have won after opening last cell not dealt with");
+    }
+
+    @Test
+    void openingCellWithMineLeadsToDefeat() {
+        int mineX = 0;
+        int mineY = 0;
+        int totalFlags = 1;
+
+        Game game = new Game(2, 2, totalFlags);
+
+        game.getField().setMineOn(mineX, mineY);
+
+        assertTrue(game.isPlaying(), "Test expected game to be playing before opening cell with mine");
+        assertFalse(game.didPlayerLose(), "Test did not expect player to have already lost before opening cell with mine");
+
+        game.attemptOpeningFromCell(mineX, mineY);
+
+        assertFalse(game.isPlaying(), "Game should no longer be playing after opening cell with mine");
+        assertTrue(game.didPlayerLose(), "Player should have lost after opening cell with mine");
     }
 
 }

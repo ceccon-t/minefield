@@ -81,7 +81,6 @@ public class Game {
     }
 
     public Set<Cell> attemptOpeningFromCell(int x, int y) {
-        // TODO: Add tests for this method
         Set<Cell> allOpen = new HashSet<>();
 
         Cell start = field.getCell(x, y);
