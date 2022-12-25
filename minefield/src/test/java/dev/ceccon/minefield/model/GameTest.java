@@ -180,4 +180,143 @@ class GameTest {
         assertTrue(game.didPlayerLose(), "Player should have lost after opening cell with mine");
     }
 
+    @Test
+    void opensEntireUninhibitedArea() {
+        int numRows = 3;
+        int numColumns = 3;
+        int totalFlags = 0;
+        int openX = 1;
+        int openY = 1;
+
+        Game game = new Game(numRows, numColumns, totalFlags);
+
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numColumns; j++) {
+                assertEquals(CellState.HIDDEN, game.getField().getCell(i, j).getState(), "Test expected all cells to start hidden");
+            }
+        }
+
+        Set<Cell> allOpen = game.attemptOpeningFromCell(openX, openY);
+
+        // Checks underlying state
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numColumns; j++) {
+                assertEquals(CellState.OPEN, game.getField().getCell(i, j).getState(), "Cell in uninhibited area should have been open automatically");
+            }
+        }
+
+        // Checks return from method
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numColumns; j++) {
+                assertTrue(allOpen.contains(game.getField().getCell(i, j)), "Cell opened automatically should have been present on returned collection");
+            }
+        }
+
+    }
+
+    @Test
+    void openingStopsAtMine() {
+        int numRows = 5;
+        int numColumns = 6;
+        int totalFlags = 1;
+        int openX = 2;
+        int openY = 1;
+        int mineX = 2;
+        int mineY = 3;
+
+        Game game = new Game(numRows, numColumns, totalFlags);
+
+        game.getField().setMineOn(mineX, mineY);
+
+        Set<Cell> allOpen = game.attemptOpeningFromCell(openX, openY);
+
+        assertEquals(CellState.HIDDEN, game.getField().getCell(mineX, mineY).getState(), "Should not have opened cell with mine");
+
+        assertFalse(allOpen.contains(game.getField().getCell(mineX, mineY)), "Should not have returned cell with mine along with opened ones");
+
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numColumns; j++) {
+                if (i == mineX && j == mineY) continue;
+
+                Cell current = game.getField().getCell(i, j);
+                assertEquals(CellState.OPEN, current.getState(), "Cell in uninhibited area should have been open automatically");
+                assertTrue(allOpen.contains(current), "Cell opened automatically should have been present on returned collection");
+            }
+        }
+    }
+
+    @Test
+    void openingStopsAtFlag() {
+        int numRows = 5;
+        int numColumns = 6;
+        int totalFlags = 1;
+        int openX = 2;
+        int openY = 1;
+        int flagX = 2;
+        int flagY = 3;
+
+        Game game = new Game(numRows, numColumns, totalFlags);
+
+        game.attemptFlaggingCell(flagX, flagY);
+
+        Set<Cell> allOpen = game.attemptOpeningFromCell(openX, openY);
+
+        assertEquals(CellState.FLAGGED, game.getField().getCell(flagX, flagY).getState(), "Should not have opened cell with flag");
+
+        assertFalse(allOpen.contains(game.getField().getCell(flagX, flagY)), "Should not have returned cell with flag along with opened ones");
+
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numColumns; j++) {
+                if (i == flagX && j == flagY) continue;
+
+                Cell current = game.getField().getCell(i, j);
+                assertEquals(CellState.OPEN, current.getState(), "Cell in uninhibited area should have been open automatically");
+                assertTrue(allOpen.contains(current), "Cell opened automatically should have been present on returned collection");
+            }
+        }
+    }
+
+    @Test
+    void openingStopsAtBorderOfMine() {
+        int numRows = 4;
+        int numColumns = 4;
+        int totalFlags = 1;
+        int openX = 2;
+        int openY = 0;
+        int mineX = 2;
+        int mineY = 2;
+        int[] openCellsXs = {0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 3, 3};
+        int[] openCellsYs = {0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 0, 1};
+        int[] hiddenCellsXs = {2, 2, 3, 3};
+        int[] hiddenCellsYs = {2, 3, 2, 3};
+
+        //  Models board below, with O = Open, X = "clicked", M = Mine (must remain hidden), H = Hidden
+        //  -----------------
+        //  | O | O | O | O |
+        //  | O | O | O | O |
+        //  | X | O | M | H |
+        //  | O | O | H | H |
+        //  -----------------
+
+        Game game = new Game(numRows, numColumns, totalFlags);
+
+        game.getField().setMineOn(mineX, mineY);
+
+        Set<Cell> allOpen = game.attemptOpeningFromCell(openX, openY);
+
+        // Check cells that should be open
+        for (int i = 0; i < openCellsXs.length; i++) {
+            Cell current = game.getField().getCell(openCellsXs[i], openCellsYs[i]);
+            assertEquals(CellState.OPEN, current.getState(), "Cell in uninhibited area should have been open automatically");
+            assertTrue(allOpen.contains(current), "Cell opened automatically should have been present on returned collection");
+        }
+
+        // Check cells that should be hidden
+        for (int i = 0; i < hiddenCellsXs.length; i++) {
+            Cell current = game.getField().getCell(hiddenCellsXs[i], hiddenCellsYs[i]);
+            assertEquals(CellState.HIDDEN, current.getState(), "Cell should not have been opened automatically");
+            assertFalse(allOpen.contains(current), "Should not have returned hidden cell along with opened ones");
+        }
+    }
+
 }

@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Game {
 
-    private enum GameResult { ONGOING, VICTORY, DEFEAT};
+    private enum GameResult { ONGOING, VICTORY, DEFEAT}
 
     private Field field;
     private Integer remainingFlags;
@@ -57,7 +57,6 @@ public class Game {
     }
 
     private Set<Cell> openClearingAround(Cell start) {
-        // TODO: Add tests for this method
         Queue<Cell> toOpen = new LinkedList<>();
         Set<Cell> processed = new HashSet<>();
 
@@ -66,9 +65,9 @@ public class Game {
         do {
             Cell current = toOpen.remove();
             if (processed.contains(current)) continue;
-            processed.add(current);
-
             if (current.getState().equals(CellState.FLAGGED)) continue;
+
+            processed.add(current);
 
             current.setState(CellState.OPEN);
 
