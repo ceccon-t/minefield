@@ -26,13 +26,17 @@ Right-click to flag cells.
 
 Clicking on "New game" or changing the difficulty restarts the game.
 
-## How to run the application
+## How to run 
 
 The game is written in Java, so you will need to have the Java runtime installed. Assuming it has alread been installed, either download the Jar file from the Releases section in the repository (alternatively, [here](https://github.com/ceccon-t/minefield/releases/download/v1.0.0/Minefield.jar)) or build the project following the instructions below, and execute it. 
 
 ## How to build the project
 
 This is a simple Maven project, so the easiest way to build it is running `mvn clean package` in the minefield folder (assuming Maven is installed - if not, check the section about libraries and frameworks on `architecture.md` to get a link to its site and install from there). A jar file containing everything the application needs to run will be created at `minefield/target/Minefield.jar`.
+
+## How to run the automated tests
+
+The simplest way is to run `mvn test` on the main folder of the application.
 
 ## More info
 
