@@ -13,7 +13,7 @@ class CellTest {
         Integer x = 3;
         Cell c = new Cell(x, 0);
 
-        assertEquals(x+1, c.getX(), description);
+        assertEquals(x, c.getX(), description);
     }
 
     @Test
