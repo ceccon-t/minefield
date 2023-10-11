@@ -38,6 +38,12 @@ Tests are written with JUnit 5, and the source files can be found under `minefie
 
 To execute all tests, run `mvn test` on the main folder of the application.
 
+## Continuous Integration
+
+The project uses Github Actions to run all automated tests whenever a new commit enters either the `main` or `dev` branches. The script that defines the workflow can be found under `.github/workflows/main-workflow.yml`.
+
+If any test is broken, the build fails and a red failure sign is displayed near the hash of the commit in the repository. If all tests pass, a green success sign is displayed instead.
+
 ## Libraries and Frameworks
 
 [Maven](https://maven.apache.org/guides/getting-started/maven-in-five-minutes.html) as a build automation tool.
@@ -45,4 +51,6 @@ To execute all tests, run `mvn test` on the main folder of the application.
 [Swing](https://docs.oracle.com/javase/tutorial/uiswing/) as the GUI framework.
 
 [JUnit](https://junit.org/junit5/docs/current/user-guide/) for automated tests.
+
+[Github Actions](https://docs.github.com/en/actions/learn-github-actions) for continuous integration.
 
