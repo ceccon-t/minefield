@@ -1,5 +1,7 @@
 # Minefield
 
+![Build status](https://github.com/ceccon-t/minefield/actions/workflows/main-workflow.yml/badge.svg "Build status")
+
 ![New Game on Intermediate](https://raw.githubusercontent.com/ceccon-t/minefield/main/images/minefield_sc0.png "New Game on Intermediate")
 
 ## Description
