@@ -1,9 +1,8 @@
-name: Main workflow
+name: Run tests on dev
 on:
   push:
     branches:
-      - main
-      - ga-release
+      - dev
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -17,5 +16,3 @@ jobs:
           distribution: 'corretto'
       - name: Run tests
         run: cd minefield && mvn verify
-      - name: Release
-        run: ls
