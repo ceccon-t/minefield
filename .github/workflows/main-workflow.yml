@@ -29,4 +29,4 @@ jobs:
         with:
           files: Minefield.jar
           name: Latest build
-          tag: ${{ steps.tag_version.outputs.new_tag }}
+          tag_name: ${{ steps.tag_version.outputs.new_tag }}
