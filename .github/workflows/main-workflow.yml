@@ -17,5 +17,5 @@ jobs:
           distribution: 'corretto'
       - name: Run tests
         run: cd minefield && mvn verify
-      - name: Release
-        run: ls
+      - name: Prepare for releasing
+        run: cp minefield/target/Minefield.jar ./Minefield.jar && ls
