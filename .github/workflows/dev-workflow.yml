@@ -5,6 +5,7 @@ on:
       - dev
     paths:
       - 'minefield/**'
+      - '.github/workflows/dev-workflow.yml'
 jobs:
   test:
     runs-on: ubuntu-latest
