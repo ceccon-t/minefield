@@ -5,7 +5,7 @@ on:
       - main
       - ga-release
 jobs:
-  test:
+  build_and_release:
     runs-on: ubuntu-latest
     steps:
       - name: Check out source code
@@ -19,8 +19,14 @@ jobs:
         run: cd minefield && mvn verify
       - name: Prepare for releasing
         run: cp minefield/target/Minefield.jar ./Minefield.jar
+      - name: Generate tag for new version
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           files: Minefield.jar
           name: Latest build
+          tag: ${{ steps.tag_version.outputs.new_tag }}
