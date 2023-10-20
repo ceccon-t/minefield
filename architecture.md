@@ -38,11 +38,15 @@ Tests are written with JUnit 5, and the source files can be found under `minefie
 
 To execute all tests, run `mvn test` on the main folder of the application.
 
-## Continuous Integration
+## CI/CD
 
-The project uses Github Actions to run all automated tests whenever a new commit enters either the `main` or `dev` branches. The script that defines the workflow can be found under `.github/workflows/main-workflow.yml`.
+The project uses Github Actions to run all automated tests whenever a new commit enters either the `main` or `dev` branches. 
 
-If any test is broken, the build fails and a red failure sign is displayed near the hash of the commit in the repository. If all tests pass, a green success sign is displayed instead. A badge with the status of the last build for the main branch is also displayed in the Readme of the project.
+If any test breaks, the build fails and a red failure sign is displayed near the hash of the commit in the repository. If all tests pass, a green success sign is displayed instead. A badge with the status of the last build for the main branch is also displayed in the Readme of the project.
+
+When new commits enter the main branch and all tests pass, a new Release is automatically generated in the repository with the resulting jar.
+
+The script that defines the main workflow can be found under `.github/workflows/main-workflow.yml`.
 
 ## Libraries and Frameworks
 

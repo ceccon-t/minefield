@@ -30,7 +30,7 @@ Clicking on "New game" or changing the difficulty restarts the game.
 
 ## How to run 
 
-The game is written in Java, so you will need to have the Java runtime installed. Assuming it has alread been installed, either download the Jar file from the Releases section in the repository (alternatively, [here](https://github.com/ceccon-t/minefield/releases/download/v1.0.0/Minefield.jar)) or build the project following the instructions below, and execute it. 
+The game is written in Java, so you will need to have the Java runtime installed. Assuming it has alread been installed, either download the Jar file from the latest entry in the [Releases](https://github.com/ceccon-t/minefield/releases) section in this repository or build the project following the instructions below, and execute it. 
 
 ## How to build the project
 
